@@ -4,6 +4,10 @@ public class Carta {
 	private int numeroCarta;
 	private String nombreCarta;
 
+	public Carta() {
+		this.numeroCarta	= 	0;
+		this.nombreCarta	=	"";	
+	}
 	public Carta(int num,String name) {
 		this.numeroCarta	= 	num;
 		this.nombreCarta	=	name;

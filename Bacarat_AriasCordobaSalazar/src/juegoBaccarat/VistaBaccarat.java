@@ -14,7 +14,7 @@ public class VistaBaccarat extends JFrame{
 
 	private JButton pedirCarta;
 	// Tamaño del JFrame
-	private int ancho = 900, largo = 900;
+	private int ancho = 700, largo = 700;
 	private JLabel title;
 	private JPanel panelCartas;
 	
@@ -41,14 +41,15 @@ public class VistaBaccarat extends JFrame{
 		
 		panelCartas = new JPanel();
 		panelCartas.setBackground(Color.GREEN.darker());
-		panelCartas.setLayout(null);
-		this.add(panelCartas);
+//		panelCartas.setLayout(null);
+		this.add(panelCartas,BorderLayout.SOUTH);
 		
 		pedirCarta = new JButton("Apostar");
 		pedirCarta.setBackground(Color.ORANGE);
 
 		pedirCarta.setBounds(ancho-100, largo/2,80,30);
 		panelCartas.add(pedirCarta);
+		//pedirCarta.setBounds(ancho-200,largo/2,80,30);
 		
 		
 	}
