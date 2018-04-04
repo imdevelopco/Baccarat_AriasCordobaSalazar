@@ -188,7 +188,7 @@ public class ControlBaccarat {
 	/*
 	 * Entrada: null
 	 * Salida: Instancia de la Clase Carta
-	 * Funcion: verifica si el valor aleatorio de la variable n ya se encuentra en el arreglo llamado utilizados,
+	 * Funcion: Verifica que la carta que se va a dar no este en uso. Si el valor aleatorio de la variable n ya se encuentra en el arreglo llamado utilizados,
 	 * si no se encuentra lo inserta y retorna la instancia de la clase Carta en esa posicion del arreglo mazo.
 	 */
  	public Carta devolverCarta() {
@@ -222,7 +222,7 @@ public class ControlBaccarat {
  		boolean st = false;
 		Jugador elMocho = new Jugador();
 		System.out.println("Digita el nombre del jugador");
- 		leer =new Scanner(System.in);
+ 		leer = new Scanner(System.in);
  		elMocho.setNombreJugador(leer.nextLine());
  		// se llenan datos del jugador
  		do{
@@ -236,54 +236,96 @@ public class ControlBaccarat {
  		System.out.println("Bienvenido a este Baccarat!: "+ elMocho.getNombreJugador());
  		// variables donde se alojan las cartas en juego tanto como para el jugador como para
  		// el cupier.
- 		Carta carta1J = devolverCarta(),carta2J = new Carta();
+ 		Carta carta1J = devolverCarta(),
+ 		      carta2J = devolverCarta(),
+ 		      carta3J;
  				
- 		Carta carta1C = devolverCarta(),carta2C=new Carta(),carta3C = new Carta();
- 		int acumuladorGeneralJugador=0;
- 		int acumuladorGeneralCupier=0;
- 		int ganador=0;
+ 		Carta carta1C = devolverCarta(),
+ 		      carta2C = devolverCarta(),
+ 		      carta3C;
+
+ 		int acumuladorGeneralJugador = 0;
+ 		int acumuladorGeneralCupier  = 0;
+ 		int ganador = 0;
  		/* dependiendo a que quiere apostar el jugador
- 		 * 0 = Apuesta al jugador
- 		 * 1 = Apuesta a la Banca
+ 		 * 0 = Apuesta a la mano del jugador
+ 		 * 1 = Apuesta a la mano de la Banca
  		 * 2 = Apuesta al empate
  		 */
- 		do {
- 			acumuladorGeneralCupier=carta1C.getNumero()+carta2C.getNumero()+carta3C.getNumero();
- 			acumuladorGeneralJugador=carta1J.getNumero()+carta2J.getNumero();
- 			System.out.println("Carta 1 de J: "+carta1J.getNombre());
- 			System.out.println("Carta 1 de C: "+carta1C.getNombre());
-	 		System.out.println(carta1J.getNumero()+" "+carta2J.getNumero()+"||"+carta1C.getNumero()+" "+carta2C.getNumero()+" "+carta3C.getNumero());
-	 		if ((acumuladorGeneralJugador == 9  || acumuladorGeneralJugador == 8)){
-	 			ganador=0;
-	 			st=true;
+
+ 			acumuladorGeneralCupier  = carta1C.getNumero()+carta2C.getNumero();
+ 			acumuladorGeneralJugador = carta1J.getNumero()+carta2J.getNumero();
+
+ 			System.out.println("Cartas Jugador: primera = "+carta1J.getNombre()+",valor="+carta1J.getNumero()+" segunda = "+carta2J.getNombre()+",valor="+carta2J.getNumero()+" Total="+acumuladorGeneralJugador );
+ 			System.out.println("Cartas Cupier: primera = "+carta1C.getNombre()+",valor="+carta1C.getNumero()+" segunda = "+carta2C.getNombre()+",valor="+carta2C.getNumero()+" Total="+acumuladorGeneralCupier );
+	 		System.out.println( carta1J.getNumero()+" "+carta2J.getNumero()+"||"+carta1C.getNumero()+" "+carta2C.getNumero() );
+	 		if ((acumuladorGeneralJugador == 9  || acumuladorGeneralJugador == 8) && (acumuladorGeneralCupier != 8 && acumuladorGeneralCupier != 9) ){
+	 			ganador = 0; //gana la mano del jugador
+	 			st      = true;
 	 		}
-	 		else if(acumuladorGeneralCupier==9 || acumuladorGeneralCupier== 8){
-	 			ganador=1;
-	 			st=true;
+	 		else if( (acumuladorGeneralCupier==9 || acumuladorGeneralCupier== 8) && (acumuladorGeneralJugador != 8 && acumuladorGeneralJugador != 9) ){
+	 			ganador = 1; //gana la mano de la Banca
+	 			st      = true;
 	 		}
 			else if((acumuladorGeneralJugador == 9  || acumuladorGeneralJugador == 8) && (acumuladorGeneralCupier==9 || acumuladorGeneralCupier== 8)) {
-				ganador=2;
+				if(acumuladorGeneralJugador > acumuladorGeneralCupier){ //si el jugador saco más (9) que la banca (8), gana la mano del jugador
+					ganador = 0; //gana la mano del jugador
+				}
+				else if(acumuladorGeneralJugador < acumuladorGeneralCupier){ //si el jugador saco menos (8) que la banca (9), gana la mano de la banca
+					ganador = 1; //gana la mano de la Banca
+				}
+				else if(acumuladorGeneralJugador == acumuladorGeneralCupier){ //si sacaron numero iguales es un empate
+					ganador = 2; //gano el empate
+				}
+
 				st=true;
-	 		}else if(acumuladorGeneralJugador < 8 && acumuladorGeneralCupier<8){
-	 			carta2J=devolverCarta();
-	 			System.out.println("Carta 2 de J: "+carta2J.getNombre());
-	 			carta2C=devolverCarta();
-	 			System.out.println("Carta 2 de C: "+carta2C.getNombre());
-	 			if(acumuladorGeneralJugador >= 10) {
+	 		}
+	 		else{ //cuando ni el jugador ni el cupier sacan un natural 
+	 			if(acumuladorGeneralJugador >= 10){
 	 				acumuladorGeneralJugador-=10;
 	 			}
-	 			if(acumuladorGeneralCupier>=10){
+	 			if(acumuladorGeneralCupier >= 10){
 	 				acumuladorGeneralCupier-=10;
 	 			}
-	 			st=true;
-	 			System.out.println(carta1J.getNumero()+" "+carta2J.getNumero()+"||"+carta1C.getNumero()+" "+carta2C.getNumero()+" "+carta3C.getNumero());
-	 		}else if (acumuladorGeneralCupier<8){
-	 			carta3C=devolverCarta();
-	 			System.out.println("Carta 3 de C: "+carta3C.getNombre());
-	 			st=true;
-	 			System.out.println(carta1J.getNumero()+" "+carta2J.getNumero()+"||"+carta1C.getNumero()+" "+carta2C.getNumero()+" "+carta3C.getNumero());
+
+	 			if(acumuladorGeneralJugador <= 5){ //si el jugador tiene 5 o menos se le da otra carta
+	 				carta3J = devolverCarta();
+	 				//si el valor de la tercera carta sumada a las otras dos da mayor o igual que 10 se le resta 10, si no se suma la tercera carta
+	 				acumuladorGeneralJugador = (acumuladorGeneralJugador+carta3J.getNumero() >= 10) ? (acumuladorGeneralJugador+carta3J.getNumero())-10 : acumuladorGeneralJugador+carta3J.getNumero() ;
+	 				System.out.println("Cartas Jugador: Tercera = "+carta3J.getNombre()+",valor="+carta3J.getNumero()+" Total="+acumuladorGeneralJugador);
+
+	 				//verificamos si se le da otra carta al cupier dependiendo  del valor de la tercera carta del jugador y el todal del cupier
+	 				if( (acumuladorGeneralCupier == 6 && (carta3J.getNumero() == 7 || carta3J.getNumero() == 6)) ||
+	 				    (acumuladorGeneralCupier == 5 && (carta3J.getNumero() == 7 || carta3J.getNumero() == 4)) ||
+	 				    (acumuladorGeneralCupier == 4 && (carta3J.getNumero() == 7 || carta3J.getNumero() == 2)) ||
+	 				    (acumuladorGeneralCupier == 3 && carta3J.getNumero() != 8) )
+	 				{
+	 					carta3C = devolverCarta();
+	 					acumuladorGeneralCupier = (acumuladorGeneralCupier+carta3C.getNumero() >= 10) ? (acumuladorGeneralCupier+carta3C.getNumero())-10 : acumuladorGeneralCupier+carta3C.getNumero();
+	 					System.out.println("Cartas Cupier: Tercera = "+carta3C.getNombre()+",valor="+carta3C.getNumero()+" Total="+acumuladorGeneralCupier);
+	 				}
+	 			}
+	 			else{ //condiciones para que el cupier saque una tercera carta sin depender de la tercera del jugador
+	 				if(acumuladorGeneralCupier <= 2){
+	 					carta3C = devolverCarta();
+	 					acumuladorGeneralCupier = (acumuladorGeneralCupier+carta3C.getNumero() >= 10) ? (acumuladorGeneralCupier+carta3C.getNumero())-10 : acumuladorGeneralCupier+carta3C.getNumero();
+	 					System.out.println("Cartas Cupier: Tercera = "+carta3C.getNombre()+",valor="+carta3C.getNumero()+" Total="+acumuladorGeneralCupier);
+	 				}
+	 			}
+
+	 			if(acumuladorGeneralJugador > acumuladorGeneralCupier){ //si el jugador saco más que la banca, gana la mano del jugador
+					ganador = 0; //gana la mano del jugador
+				}
+				else if(acumuladorGeneralJugador < acumuladorGeneralCupier){ //si el jugador saco menos que la banca, gana la mano de la banca
+					ganador = 1; //gana la mano de la Banca
+				}
+				else if(acumuladorGeneralJugador == acumuladorGeneralCupier){ //si sacaron numeros iguales es un empate
+					ganador = 2; //gano el empate
+				}
+
 	 		}
- 		}while(st=false);
+ 		
+
  		if(elMocho.getTipoApuesta() == ganador) {
  			System.out.println("Ganaste Cabron!");
  		}else {
